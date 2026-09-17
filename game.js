@@ -101,6 +101,25 @@ function drawScene() {
   }
 }
 
+const HUD_HEIGHT = 18;
+
+function drawHUD() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  ctx.fillRect( 0, 0, CANVAS_WIDTH, HUD_HEIGHT );
+
+  ctx.fillStyle = '#fff';
+  ctx.font = '12px sans-serif';
+
+  ctx.textAlign = 'left';
+  ctx.fillText( `Score: ${ state.score }`, 6, 13 );
+
+  ctx.textAlign = 'center';
+  ctx.fillText( `Vidas: ${ state.lives }`, CANVAS_WIDTH / 2, 13 );
+
+  ctx.textAlign = 'right';
+  ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH - 6, 13 );
+}
+
 function drawStartOverlay() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
   ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
@@ -298,7 +317,10 @@ function render() {
   } else if ( state.status === 'win' ) {
     drawEndOverlay( '¡GANASTE!' );
   } else if ( state.status === 'paused' ) {
+    drawHUD();
     drawPauseOverlay();
+  } else if ( state.status === 'playing' ) {
+    drawHUD();
   }
 }
 
