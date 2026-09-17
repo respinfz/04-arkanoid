@@ -95,8 +95,19 @@ function drawStartOverlay() {
   ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 30 );
 }
 
+const keys = {};
+
+function updatePaddle() {
+  if ( keys[ 'ArrowLeft' ] ) state.paddle.x -= state.paddle.speed;
+  if ( keys[ 'ArrowRight' ] ) state.paddle.x += state.paddle.speed;
+
+  state.paddle.x = Math.max( 0, Math.min( CANVAS_WIDTH - state.paddle.w, state.paddle.x ) );
+}
+
 function update() {
-  // El estado 'start' no tiene lógica de actualización propia todavía.
+  if ( state.status === 'playing' ) {
+    updatePaddle();
+  }
 }
 
 function render() {
@@ -114,9 +125,15 @@ function loop() {
 }
 
 window.addEventListener( 'keydown', ( e ) => {
+  keys[ e.code ] = true;
+
   if ( e.code === 'Space' && state.status === 'start' ) {
     state.status = 'playing';
   }
+} );
+
+window.addEventListener( 'keyup', ( e ) => {
+  keys[ e.code ] = false;
 } );
 
 loadSpritesheet( () => requestAnimationFrame( loop ) );
