@@ -118,6 +118,17 @@ function drawStartOverlay() {
   ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 30 );
 }
 
+function drawPauseOverlay() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+  ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+
+  ctx.font = 'bold 32px sans-serif';
+  ctx.fillText( 'PAUSA', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 );
+}
+
 function drawEndOverlay( title ) {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
   ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
@@ -273,9 +284,8 @@ function update() {
   if ( state.status === 'playing' ) {
     updatePaddle();
     updateBall();
+    updateExplosions();
   }
-
-  updateExplosions();
 }
 
 function render() {
@@ -287,6 +297,8 @@ function render() {
     drawEndOverlay( 'GAME OVER' );
   } else if ( state.status === 'win' ) {
     drawEndOverlay( '¡GANASTE!' );
+  } else if ( state.status === 'paused' ) {
+    drawPauseOverlay();
   }
 }
 
@@ -320,6 +332,10 @@ window.addEventListener( 'keydown', ( e ) => {
     launchBall();
   } else if ( e.code === 'Space' && ( state.status === 'gameover' || state.status === 'win' ) ) {
     resetGame();
+  } else if ( ( e.code === 'KeyP' || e.code === 'Escape' ) && state.status === 'playing' ) {
+    state.status = 'paused';
+  } else if ( ( e.code === 'KeyP' || e.code === 'Escape' ) && state.status === 'paused' ) {
+    state.status = 'playing';
   }
 } );
 
