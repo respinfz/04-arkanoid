@@ -147,7 +147,14 @@ function updateBall() {
 
   checkPaddleCollision();
   checkBlockCollision();
+  checkWinCondition();
   checkBallLost();
+}
+
+function checkWinCondition() {
+  if ( state.blocks.every( ( block ) => !block.alive ) ) {
+    state.status = 'win';
+  }
 }
 
 function checkBallLost() {
