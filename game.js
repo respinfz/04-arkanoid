@@ -76,6 +76,14 @@ function drawScene() {
 
   drawSprite( ctx, 'paddle', state.paddle.x, state.paddle.y, state.paddle.w, state.paddle.h );
   drawSprite( ctx, 'ball', state.ball.x, state.ball.y, state.ball.w, state.ball.h );
+
+  const now = performance.now();
+  for ( const explosion of state.explosions ) {
+    const elapsed = now - explosion.startTime;
+    const frameIndex = Math.min( 3, Math.floor( elapsed / ( EXPLOSION_DURATION / 4 ) ) );
+    const frame = EXPLOSION_FRAMES[ explosion.color ][ frameIndex ];
+    drawFrame( ctx, frame, explosion.x, explosion.y, BLOCK_W, BLOCK_H );
+  }
 }
 
 function drawStartOverlay() {
@@ -138,6 +146,42 @@ function updateBall() {
   }
 
   checkPaddleCollision();
+  checkBlockCollision();
+}
+
+function checkBlockCollision() {
+  const ball = state.ball;
+
+  for ( const block of state.blocks ) {
+    if ( !block.alive ) continue;
+
+    const collides = ball.x < block.x + block.w
+      && ball.x + ball.w > block.x
+      && ball.y < block.y + block.h
+      && ball.y + ball.h > block.y;
+
+    if ( !collides ) continue;
+
+    block.alive = false;
+    state.score += block.points;
+    state.explosions.push( { x: block.x, y: block.y, color: block.color, startTime: performance.now() } );
+
+    const overlapX = Math.min( ball.x + ball.w - block.x, block.x + block.w - ball.x );
+    const overlapY = Math.min( ball.y + ball.h - block.y, block.y + block.h - ball.y );
+
+    if ( overlapX < overlapY ) {
+      ball.vx *= -1;
+    } else {
+      ball.vy *= -1;
+    }
+
+    break; // un solo bloque por frame
+  }
+}
+
+function updateExplosions() {
+  const now = performance.now();
+  state.explosions = state.explosions.filter( ( e ) => now - e.startTime < EXPLOSION_DURATION );
 }
 
 const MAX_BOUNCE_ANGLE = Math.PI / 3; // 60 grados desde la vertical
@@ -172,6 +216,8 @@ function update() {
     updatePaddle();
     updateBall();
   }
+
+  updateExplosions();
 }
 
 function render() {
