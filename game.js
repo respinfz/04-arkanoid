@@ -136,6 +136,35 @@ function updateBall() {
     ball.y = 0;
     ball.vy *= -1;
   }
+
+  checkPaddleCollision();
+}
+
+const MAX_BOUNCE_ANGLE = Math.PI / 3; // 60 grados desde la vertical
+
+function checkPaddleCollision() {
+  const ball = state.ball;
+  const paddle = state.paddle;
+
+  if ( ball.vy <= 0 ) return; // solo rebota si la bola va cayendo
+
+  const collides = ball.x < paddle.x + paddle.w
+    && ball.x + ball.w > paddle.x
+    && ball.y < paddle.y + paddle.h
+    && ball.y + ball.h > paddle.y;
+
+  if ( !collides ) return;
+
+  const ballCenterX = ball.x + ball.w / 2;
+  const paddleCenterX = paddle.x + paddle.w / 2;
+  const relativeIntersect = Math.max( -1, Math.min( 1, ( ballCenterX - paddleCenterX ) / ( paddle.w / 2 ) ) );
+
+  const angle = relativeIntersect * MAX_BOUNCE_ANGLE;
+  const speed = Math.hypot( ball.vx, ball.vy );
+
+  ball.vx = speed * Math.sin( angle );
+  ball.vy = -speed * Math.cos( angle );
+  ball.y = paddle.y - ball.h;
 }
 
 function update() {
