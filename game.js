@@ -103,6 +103,24 @@ function drawStartOverlay() {
   ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 30 );
 }
 
+function drawEndOverlay( title ) {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+  ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+
+  ctx.font = 'bold 32px sans-serif';
+  ctx.fillText( title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 60 );
+
+  ctx.font = '18px sans-serif';
+  ctx.fillText( `Puntaje: ${ state.score }`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20 );
+  ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 10 );
+
+  ctx.font = '16px sans-serif';
+  ctx.fillText( 'Presiona ESPACIO para reiniciar', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50 );
+}
+
 const keys = {};
 
 function updatePaddle() {
@@ -249,7 +267,26 @@ function render() {
 
   if ( state.status === 'start' ) {
     drawStartOverlay();
+  } else if ( state.status === 'gameover' ) {
+    drawEndOverlay( 'GAME OVER' );
+  } else if ( state.status === 'win' ) {
+    drawEndOverlay( '¡GANASTE!' );
   }
+}
+
+function resetGame() {
+  state.score = 0;
+  state.lives = 3;
+  state.blocks = createBlocks();
+  state.explosions = [];
+
+  state.paddle.x = 159;
+
+  state.ball.attached = true;
+  state.ball.vx = 0;
+  state.ball.vy = 0;
+
+  state.status = 'playing';
 }
 
 function loop() {
@@ -265,6 +302,8 @@ window.addEventListener( 'keydown', ( e ) => {
     state.status = 'playing';
   } else if ( e.code === 'Space' && state.status === 'playing' && state.ball.attached ) {
     launchBall();
+  } else if ( e.code === 'Space' && ( state.status === 'gameover' || state.status === 'win' ) ) {
+    resetGame();
   }
 } );
 
