@@ -61,6 +61,21 @@ function loadHighScore() {
   }
 }
 
+function saveHighScore() {
+  try {
+    localStorage.setItem( HIGH_SCORE_KEY, JSON.stringify( { value: state.highScore } ) );
+  } catch ( e ) {
+    // localStorage no disponible: el high score no persiste, pero el juego sigue funcionando.
+  }
+}
+
+function updateHighScore() {
+  if ( state.score > state.highScore ) {
+    state.highScore = state.score;
+    saveHighScore();
+  }
+}
+
 state.highScore = loadHighScore();
 
 const canvas = document.getElementById( 'game' );
@@ -206,6 +221,7 @@ function checkBlockCollision() {
 
     block.alive = false;
     state.score += block.points;
+    updateHighScore();
     state.explosions.push( { x: block.x, y: block.y, color: block.color, startTime: performance.now() } );
 
     const overlapX = Math.min( ball.x + ball.w - block.x, block.x + block.w - ball.x );
