@@ -1,6 +1,6 @@
 # SPEC 01 — MVP jugable de Arkanoid
 
-> **Status:** Draft
+> **Status:** Approved
 > **Depends on:** Ninguno (primer spec del proyecto)
 > **Date:** 2026-09-17
 > **Objective:** Construir una versión mínima jugable de Arkanoid, con un nivel fijo de bloques, pala y bola controladas por teclado, sistema de vidas y puntaje, y persistencia del high score en localStorage.
