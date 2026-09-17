@@ -147,6 +147,23 @@ function updateBall() {
 
   checkPaddleCollision();
   checkBlockCollision();
+  checkBallLost();
+}
+
+function checkBallLost() {
+  const ball = state.ball;
+
+  if ( ball.y <= CANVAS_HEIGHT ) return;
+
+  state.lives -= 1;
+
+  if ( state.lives <= 0 ) {
+    state.status = 'gameover';
+  } else {
+    ball.attached = true;
+    ball.vx = 0;
+    ball.vy = 0;
+  }
 }
 
 function checkBlockCollision() {
