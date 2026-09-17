@@ -104,9 +104,44 @@ function updatePaddle() {
   state.paddle.x = Math.max( 0, Math.min( CANVAS_WIDTH - state.paddle.w, state.paddle.x ) );
 }
 
+const BALL_SPEED = 5;
+
+function launchBall() {
+  state.ball.attached = false;
+  state.ball.vx = 0;
+  state.ball.vy = -BALL_SPEED;
+}
+
+function updateBall() {
+  const ball = state.ball;
+
+  if ( ball.attached ) {
+    ball.x = state.paddle.x + state.paddle.w / 2 - ball.w / 2;
+    ball.y = state.paddle.y - ball.h;
+    return;
+  }
+
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+
+  if ( ball.x <= 0 ) {
+    ball.x = 0;
+    ball.vx *= -1;
+  } else if ( ball.x + ball.w >= CANVAS_WIDTH ) {
+    ball.x = CANVAS_WIDTH - ball.w;
+    ball.vx *= -1;
+  }
+
+  if ( ball.y <= 0 ) {
+    ball.y = 0;
+    ball.vy *= -1;
+  }
+}
+
 function update() {
   if ( state.status === 'playing' ) {
     updatePaddle();
+    updateBall();
   }
 }
 
@@ -129,6 +164,8 @@ window.addEventListener( 'keydown', ( e ) => {
 
   if ( e.code === 'Space' && state.status === 'start' ) {
     state.status = 'playing';
+  } else if ( e.code === 'Space' && state.status === 'playing' && state.ball.attached ) {
+    launchBall();
   }
 } );
 
