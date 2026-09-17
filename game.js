@@ -48,10 +48,25 @@ const state = {
   explosions: [],
 };
 
+const HIGH_SCORE_KEY = 'arkanoid:highScore:v1';
+
+function loadHighScore() {
+  try {
+    const raw = localStorage.getItem( HIGH_SCORE_KEY );
+    if ( !raw ) return 0;
+    const parsed = JSON.parse( raw );
+    return typeof parsed.value === 'number' ? parsed.value : 0;
+  } catch ( e ) {
+    return 0;
+  }
+}
+
+state.highScore = loadHighScore();
+
 const canvas = document.getElementById( 'game' );
 const ctx = canvas.getContext( '2d' );
 
-function drawStaticScene() {
+function drawScene() {
   ctx.clearRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
 
   for ( const block of state.blocks ) {
@@ -63,4 +78,45 @@ function drawStaticScene() {
   drawSprite( ctx, 'ball', state.ball.x, state.ball.y, state.ball.w, state.ball.h );
 }
 
-loadSpritesheet( drawStaticScene );
+function drawStartOverlay() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+  ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+
+  ctx.font = 'bold 32px sans-serif';
+  ctx.fillText( 'ARKANOID', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 40 );
+
+  ctx.font = '18px sans-serif';
+  ctx.fillText( 'Presiona ESPACIO para empezar', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 );
+
+  ctx.font = '16px sans-serif';
+  ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 30 );
+}
+
+function update() {
+  // El estado 'start' no tiene lógica de actualización propia todavía.
+}
+
+function render() {
+  drawScene();
+
+  if ( state.status === 'start' ) {
+    drawStartOverlay();
+  }
+}
+
+function loop() {
+  update();
+  render();
+  requestAnimationFrame( loop );
+}
+
+window.addEventListener( 'keydown', ( e ) => {
+  if ( e.code === 'Space' && state.status === 'start' ) {
+    state.status = 'playing';
+  }
+} );
+
+loadSpritesheet( () => requestAnimationFrame( loop ) );
