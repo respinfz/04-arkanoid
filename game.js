@@ -428,6 +428,8 @@ function render() {
     drawEndOverlay( 'GAME OVER' );
   } else if ( state.status === 'win' ) {
     drawLevelCompleteOverlay();
+  } else if ( state.status === 'completed' ) {
+    drawEndOverlay( 'JUEGO COMPLETADO' );
   } else if ( state.status === 'paused' ) {
     drawHUD();
     drawPauseOverlay();
