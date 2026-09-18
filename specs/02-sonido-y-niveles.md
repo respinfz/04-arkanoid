@@ -1,6 +1,6 @@
 # SPEC 02 — Sonido y niveles con dificultad progresiva
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 01 (MVP jugable de Arkanoid)
 > **Date:** 2026-09-17
 > **Objective:** Agregar efectos de sonido a los rebotes y roturas de bloques, e introducir 5 niveles fijos de dificultad creciente (velocidad de bola, ancho de pala y complejidad del layout) que se atraviesan secuencialmente hasta una pantalla final de "juego completado".
