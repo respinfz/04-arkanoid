@@ -210,14 +210,17 @@ function updateBall() {
   if ( ball.x <= 0 ) {
     ball.x = 0;
     ball.vx *= -1;
+    playSound( sounds.ballBounce );
   } else if ( ball.x + ball.w >= CANVAS_WIDTH ) {
     ball.x = CANVAS_WIDTH - ball.w;
     ball.vx *= -1;
+    playSound( sounds.ballBounce );
   }
 
   if ( ball.y <= 0 ) {
     ball.y = 0;
     ball.vy *= -1;
+    playSound( sounds.ballBounce );
   }
 
   checkPaddleCollision();
@@ -309,6 +312,8 @@ function checkPaddleCollision() {
   ball.vx = speed * Math.sin( angle );
   ball.vy = -speed * Math.cos( angle );
   ball.y = paddle.y - ball.h;
+
+  playSound( sounds.ballBounce );
 }
 
 function update() {
