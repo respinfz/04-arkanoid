@@ -204,7 +204,7 @@ function drawHUD() {
   ctx.fillText( `Score: ${ state.score }`, 6, 13 );
 
   ctx.textAlign = 'center';
-  ctx.fillText( `Vidas: ${ state.lives }`, CANVAS_WIDTH / 2, 13 );
+  ctx.fillText( `Nivel ${ state.level }/5   Vidas: ${ state.lives }`, CANVAS_WIDTH / 2, 13 );
 
   ctx.textAlign = 'right';
   ctx.fillText( `High score: ${ state.highScore }`, CANVAS_WIDTH - 6, 13 );

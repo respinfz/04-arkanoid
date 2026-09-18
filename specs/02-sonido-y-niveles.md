@@ -171,18 +171,18 @@ Convenciones:
 
 ## Acceptance criteria
 
-- [ ] Al rebotar la bola contra una pared o la pala se reproduce `ball-bounce.mp3`; al golpear un bloque no se reproduce este sonido.
-- [ ] Al romper un bloque se reproduce `break-sound.mp3` junto con la animación de explosión.
-- [ ] Presionar `M` alterna el mute; con mute activo no suena ningún efecto nuevo hasta desactivarlo.
-- [ ] Una partida nueva siempre arranca en el nivel 1, con el layout completo (15x7 sin huecos) y la pala en 162px de ancho.
-- [ ] Al romper todos los bloques del nivel actual se muestra el overlay "Nivel N completado".
-- [ ] Presionar Espacio en ese overlay avanza a `state.level + 1`, actualiza el layout de bloques, el ancho de la pala y la velocidad de la bola según la configuración del nuevo nivel, y conserva `score` y `lives`.
-- [ ] El ancho de la pala y la velocidad de la bola son visiblemente distintos entre el nivel 1 y el nivel 5.
-- [ ] Al completar el nivel 5 se muestra el overlay "Juego completado" (distinto del de nivel intermedio) con el score final y el high score.
-- [ ] Presionar Espacio en el overlay de "Juego completado" reinicia la partida desde el nivel 1, con score y vidas reseteados y el high score conservado.
-- [ ] Perder todas las vidas en cualquier nivel muestra el overlay de game over existente, sin cambios respecto al MVP.
-- [ ] Recargar la página siempre inicia una partida nueva en el nivel 1; el nivel no se persiste.
-- [ ] El HUD muestra el nivel actual junto a score, vidas y high score.
+- [x] Al rebotar la bola contra una pared o la pala se reproduce `ball-bounce.mp3`; al golpear un bloque no se reproduce este sonido.
+- [x] Al romper un bloque se reproduce `break-sound.mp3` junto con la animación de explosión.
+- [x] Presionar `M` alterna el mute; con mute activo no suena ningún efecto nuevo hasta desactivarlo.
+- [x] Una partida nueva siempre arranca en el nivel 1, con el layout completo (15x7 sin huecos) y la pala en 162px de ancho.
+- [x] Al romper todos los bloques del nivel actual se muestra el overlay "Nivel N completado".
+- [x] Presionar Espacio en ese overlay avanza a `state.level + 1`, actualiza el layout de bloques, el ancho de la pala y la velocidad de la bola según la configuración del nuevo nivel, y conserva `score` y `lives`.
+- [x] El ancho de la pala y la velocidad de la bola son visiblemente distintos entre el nivel 1 y el nivel 5.
+- [x] Al completar el nivel 5 se muestra el overlay "Juego completado" (distinto del de nivel intermedio) con el score final y el high score.
+- [x] Presionar Espacio en el overlay de "Juego completado" reinicia la partida desde el nivel 1, con score y vidas reseteados y el high score conservado.
+- [x] Perder todas las vidas en cualquier nivel muestra el overlay de game over existente, sin cambios respecto al MVP.
+- [x] Recargar la página siempre inicia una partida nueva en el nivel 1; el nivel no se persiste.
+- [x] El HUD muestra el nivel actual junto a score, vidas y high score.
 
 ---
 
