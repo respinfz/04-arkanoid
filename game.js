@@ -34,6 +34,7 @@ const state = {
   score: 0,
   lives: 3,
   highScore: 0,
+  muted: false,
 
   paddle: { x: 159, y: 600, w: 162, h: 14, speed: 6 },
 
@@ -77,6 +78,17 @@ function updateHighScore() {
 }
 
 state.highScore = loadHighScore();
+
+const sounds = {
+  ballBounce: new Audio( 'assets/sounds/ball-bounce.mp3' ),
+  breakBlock: new Audio( 'assets/sounds/break-sound.mp3' ),
+};
+
+function playSound( audio ) {
+  if ( state.muted ) return;
+  audio.currentTime = 0;
+  audio.play();
+}
 
 const canvas = document.getElementById( 'game' );
 const ctx = canvas.getContext( '2d' );
@@ -358,6 +370,8 @@ window.addEventListener( 'keydown', ( e ) => {
     state.status = 'paused';
   } else if ( ( e.code === 'KeyP' || e.code === 'Escape' ) && state.status === 'paused' ) {
     state.status = 'playing';
+  } else if ( e.code === 'KeyM' ) {
+    state.muted = !state.muted;
   }
 } );
 
