@@ -238,6 +238,20 @@ function drawPauseOverlay() {
   ctx.fillText( 'PAUSA', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 );
 }
 
+function drawLevelCompleteOverlay() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+  ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
+
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+
+  ctx.font = 'bold 32px sans-serif';
+  ctx.fillText( `Nivel ${ state.level } completado`, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20 );
+
+  ctx.font = '16px sans-serif';
+  ctx.fillText( 'Presiona ESPACIO para continuar', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 20 );
+}
+
 function drawEndOverlay( title ) {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
   ctx.fillRect( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
@@ -413,7 +427,7 @@ function render() {
   } else if ( state.status === 'gameover' ) {
     drawEndOverlay( 'GAME OVER' );
   } else if ( state.status === 'win' ) {
-    drawEndOverlay( '¡GANASTE!' );
+    drawLevelCompleteOverlay();
   } else if ( state.status === 'paused' ) {
     drawHUD();
     drawPauseOverlay();
