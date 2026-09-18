@@ -324,9 +324,9 @@ function updateBall() {
 }
 
 function checkWinCondition() {
-  if ( state.blocks.every( ( block ) => !block.alive ) ) {
-    state.status = 'win';
-  }
+  if ( !state.blocks.every( ( block ) => !block.alive ) ) return;
+
+  state.status = state.level === 5 ? 'completed' : 'win';
 }
 
 function checkBallLost() {
@@ -441,6 +441,20 @@ function applyLevelPaddleWidth() {
   state.paddle.x = ( CANVAS_WIDTH - state.paddle.w ) / 2;
 }
 
+function advanceLevel() {
+  state.level += 1;
+  state.blocks = createBlocks( LEVELS[ state.level - 1 ].layout );
+  state.explosions = [];
+
+  applyLevelPaddleWidth();
+
+  state.ball.attached = true;
+  state.ball.vx = 0;
+  state.ball.vy = 0;
+
+  state.status = 'playing';
+}
+
 function resetGame() {
   state.score = 0;
   state.lives = 3;
@@ -470,8 +484,10 @@ window.addEventListener( 'keydown', ( e ) => {
     state.status = 'playing';
   } else if ( e.code === 'Space' && state.status === 'playing' && state.ball.attached ) {
     launchBall();
-  } else if ( e.code === 'Space' && ( state.status === 'gameover' || state.status === 'win' ) ) {
+  } else if ( e.code === 'Space' && ( state.status === 'gameover' || state.status === 'completed' ) ) {
     resetGame();
+  } else if ( e.code === 'Space' && state.status === 'win' ) {
+    advanceLevel();
   } else if ( ( e.code === 'KeyP' || e.code === 'Escape' ) && state.status === 'playing' ) {
     state.status = 'paused';
   } else if ( ( e.code === 'KeyP' || e.code === 'Escape' ) && state.status === 'paused' ) {
