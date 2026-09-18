@@ -268,9 +268,11 @@ function updatePaddle() {
 const BALL_SPEED = 5;
 
 function launchBall() {
+  const multiplier = LEVELS[ state.level - 1 ].ballSpeedMultiplier;
+
   state.ball.attached = false;
   state.ball.vx = 0;
-  state.ball.vy = -BALL_SPEED;
+  state.ball.vy = -BALL_SPEED * multiplier;
 }
 
 function updateBall() {
