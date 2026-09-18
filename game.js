@@ -268,6 +268,7 @@ function checkBlockCollision() {
     state.score += block.points;
     updateHighScore();
     state.explosions.push( { x: block.x, y: block.y, color: block.color, startTime: performance.now() } );
+    playSound( sounds.breakBlock );
 
     const overlapX = Math.min( ball.x + ball.w - block.x, block.x + block.w - ball.x );
     const overlapY = Math.min( ball.y + ball.h - block.y, block.y + block.h - ball.y );
