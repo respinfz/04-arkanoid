@@ -420,6 +420,11 @@ function render() {
   }
 }
 
+function applyLevelPaddleWidth() {
+  state.paddle.w = LEVELS[ state.level - 1 ].paddleWidth;
+  state.paddle.x = ( CANVAS_WIDTH - state.paddle.w ) / 2;
+}
+
 function resetGame() {
   state.score = 0;
   state.lives = 3;
@@ -427,7 +432,7 @@ function resetGame() {
   state.blocks = createBlocks( LEVELS[ state.level - 1 ].layout );
   state.explosions = [];
 
-  state.paddle.x = 159;
+  applyLevelPaddleWidth();
 
   state.ball.attached = true;
   state.ball.vx = 0;
