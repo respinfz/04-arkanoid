@@ -4,11 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-This is an **Arkanoid game** to be built with plain HTML, CSS, and JavaScript — **zero dependencies** (no build tools, no npm packages, no bundler). As of now the game itself is **not implemented yet**: the repo only contains the spec-driven workflow scaffolding and game assets. There is no `index.html`, no game loop, and no `specs/` directory yet.
+This is an **Arkanoid game** built with plain HTML, CSS, and JavaScript — **zero dependencies** (no build tools, no npm packages, no bundler). The game is implemented: `index.html` loads `assets/spritesheet.js` and `game.js`, which contains the entire game (state, update loop, rendering, input) in a single file, plain `<script>` style with no modules.
 
-The repo is also not currently a git repository — `git init` will be needed before using the `/spec-impl` workflow described below, which relies on git branches.
+Specs implemented so far (see `specs/`):
+- `specs/01-mvp-arkanoid.md` — MVP: 480x640 canvas, paddle/ball/block collisions, lives, score, win/lose overlays, high score in `localStorage`.
+- `specs/02-sonido-y-niveles.md` — sound effects (bounce/break), mute toggle (`M`), and 5 fixed levels with increasing ball speed, shrinking paddle width, and progressively sparser block layouts.
 
-Because there is no code yet, do not assume any existing architecture. When implementation starts, look for a `specs/` folder — it is the source of truth for what has been built and how it's organized.
+Both are marked `Implemented`. Check `specs/` before assuming architecture or scope — it reflects the actual data model (levels, scoring, layouts) more precisely than skimming `game.js` alone.
 
 ## Development workflow: spec-driven
 
@@ -18,8 +20,8 @@ This repo uses a two-phase, spec-driven workflow imported as custom skills (see 
 - **`/spec-impl <NN-slug>`** (`.agents/skills/spec-impl/SKILL.md`) — implements an `Approved` spec. It refuses to run on any other state (`Draft`, `In review`, `Implemented`, `Obsolete`). On success it creates/switches to a git branch named `spec-NN-slug` (controlled by `AutoCreateBranch` in `specs/.spec-config.yml`, default `true`), then implements the plan **one step at a time**, pausing after each step for review. It never commits automatically.
 
 Practical implications for any agent working here:
-- Don't write game code directly unless a corresponding approved spec exists (or the user explicitly asks to skip the process).
-- Check `specs/` for the current state of the project before making architectural assumptions — it reflects intended scope/data model/plan even before code exists.
+- Don't write game code directly unless a corresponding approved spec exists (or the user explicitly asks to skip the process). For new features, write a new `specs/NN-slug.md` via `/spec` rather than editing `game.js` ad hoc.
+- Check `specs/` for the current state of the project before making architectural assumptions — it's the source of truth for scope/data model, and is more reliable than inferring intent from `game.js` alone.
 - Never mark a spec `Approved` — that transition is made by the human.
 
 ## Assets available for implementation
@@ -31,6 +33,6 @@ Practical implications for any agent working here:
   - `drawFrame(ctx, frame, x, y, w, h)` — draws an explicit `{sx, sy, sw, sh}` frame, used for animations.
   - `SPRITES` — static frame coordinates for `paddle`, `ball`, and `blocks.{gray,red,yellow,cyan,magenta,hotpink,green}`.
   - `EXPLOSION_FRAMES` — 4-frame explosion animation per block color, paired with `EXPLOSION_DURATION` (150ms).
-- `assets/sounds/ball-bounce.mp3`, `assets/sounds/break-sound.mp3` — sound effects for the ball bouncing and blocks breaking.
+- `assets/sounds/ball-bounce.mp3`, `assets/sounds/break-sound.mp3` — sound effects for the ball bouncing and blocks breaking, played via plain `Audio` objects in `game.js` (see `sounds` / `playSound`), gated by `state.muted`.
 
 Any future game code should reuse these rather than introducing new asset-loading abstractions or a bundler.
