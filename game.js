@@ -10,11 +10,88 @@ const BLOCK_H = 16;
 const ROW_COLORS = [ 'green', 'hotpink', 'magenta', 'cyan', 'yellow', 'red', 'gray' ];
 const COLOR_POINTS = { gray: 1, red: 2, yellow: 3, cyan: 4, magenta: 5, hotpink: 6, green: 7 };
 
-function createBlocks() {
+// Cada layout es un arreglo de 7 strings de 15 caracteres (filas de arriba hacia abajo:
+// green, hotpink, magenta, cyan, yellow, red, gray). 'X' = bloque presente, '.' = hueco.
+const LEVELS = [
+  {
+    id: 1,
+    ballSpeedMultiplier: 1.00,
+    paddleWidth: 162,
+    layout: [
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+    ],
+  },
+  {
+    id: 2,
+    ballSpeedMultiplier: 1.15,
+    paddleWidth: 152,
+    layout: [
+      'XXXXXXX.XXXXXXX',
+      'XXXXXXX.XXXXXXX',
+      'XXXXXXX.XXXXXXX',
+      'XXXXXXX.XXXXXXX',
+      'XXXXXXX.XXXXXXX',
+      'XXXXXXX.XXXXXXX',
+      'XXXXXXX.XXXXXXX',
+    ],
+  },
+  {
+    id: 3,
+    ballSpeedMultiplier: 1.30,
+    paddleWidth: 142,
+    layout: [
+      'XXX.XXXXXXX.XXX',
+      'XXX.XXXXXXX.XXX',
+      'XXX.XXXXXXX.XXX',
+      'XXX.XXXXXXX.XXX',
+      'XXX.XXXXXXX.XXX',
+      'XXX.XXXXXXX.XXX',
+      'XXX.XXXXXXX.XXX',
+    ],
+  },
+  {
+    id: 4,
+    ballSpeedMultiplier: 1.45,
+    paddleWidth: 132,
+    layout: [
+      '..XXXXXXXXXXX..',
+      '.XXXXXXXXXXXXX.',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      'XXXXXXXXXXXXXXX',
+      '.XXXXXXXXXXXXX.',
+      '..XXXXXXXXXXX..',
+    ],
+  },
+  {
+    id: 5,
+    ballSpeedMultiplier: 1.60,
+    paddleWidth: 122,
+    layout: [
+      'X.X.X.X.X.X.X.X',
+      '.X.X.X.X.X.X.X.',
+      'X.X.X.X.X.X.X.X',
+      '.X.X.X.X.X.X.X.',
+      'X.X.X.X.X.X.X.X',
+      '.X.X.X.X.X.X.X.',
+      'X.X.X.X.X.X.X.X',
+    ],
+  },
+];
+
+function createBlocks( layout ) {
   const blocks = [];
   for ( let row = 0; row < BLOCK_ROWS; row++ ) {
     const color = ROW_COLORS[ row ];
     for ( let col = 0; col < BLOCK_COLS; col++ ) {
+      if ( layout[ row ][ col ] !== 'X' ) continue;
+
       blocks.push( {
         x: col * BLOCK_W,
         y: row * BLOCK_H,
@@ -35,6 +112,7 @@ const state = {
   lives: 3,
   highScore: 0,
   muted: false,
+  level: 1,
 
   paddle: { x: 159, y: 600, w: 162, h: 14, speed: 6 },
 
@@ -44,7 +122,7 @@ const state = {
     attached: true,
   },
 
-  blocks: createBlocks(),
+  blocks: createBlocks( LEVELS[ 0 ].layout ),
 
   explosions: [],
 };
@@ -345,7 +423,8 @@ function render() {
 function resetGame() {
   state.score = 0;
   state.lives = 3;
-  state.blocks = createBlocks();
+  state.level = 1;
+  state.blocks = createBlocks( LEVELS[ state.level - 1 ].layout );
   state.explosions = [];
 
   state.paddle.x = 159;
